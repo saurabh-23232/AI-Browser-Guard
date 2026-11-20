@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="AI Browser Guard">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#070d26"/><stop offset="1" stop-color="#241a63"/></linearGradient>
+    <linearGradient id="sh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset=".55" stop-color="#6366F1"/><stop offset="1" stop-color="#A855F7"/></linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="url(#bg)"/>
+  <path d="M64 13 L104 27 V62 Q104 96 64 114 Q24 96 24 62 V27 Z" fill="url(#sh)"/>
+  <path d="M64 19 L98 31 V62 Q98 91 64 107 Q30 91 30 62 V31 Z" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="2"/>
+  <circle cx="64" cy="53" r="11" fill="#fff"/>
+  <path d="M58.5 61 H69.5 L73 90 H55 Z" fill="#fff"/>
+</svg>

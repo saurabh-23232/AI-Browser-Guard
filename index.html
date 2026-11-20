@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Browser Guard — Stop sensitive data leaking into AI tools</title>
+  <meta name="description" content="AI Browser Guard is a local-first Chrome extension that stops passwords, API keys, customer data and source code from leaking to ChatGPT, Gemini, Claude and other AI sites. No cloud. No telemetry.">
+  <meta name="theme-color" content="#070d26">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AI Browser Guard — Protect your sensitive data from AI leaks">
+  <meta property="og:description" content="Local-first browser protection that blocks credentials, customer data and source code before they reach an AI model.">
+  <meta property="og:image" content="/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="/js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav" id="top">
+    <div class="wrap nav-in">
+      <a class="brand" href="#top" aria-label="AI Browser Guard home">
+        <img src="/assets/logo.svg" width="36" height="36" alt="">
+        <span><b>AI Browser Guard</b><small>Protect your Sensitive data with us</small></span>
+      </a>
+      <nav aria-label="Main" class="links" id="links">
+        <a href="#risk">The risk</a>
+        <a href="#how">How it works</a>
+        <a href="#try">Try the detector</a>
+        <a href="#features">Features</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn btn-primary nav-cta" data-install href="https://chromewebstore.google.com/detail/monk-focus/dagfandmfdlbgdgelnbeiacmchjihpnd" target="_blank" rel="noopener noreferrer"><svg class="dl" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M11 3h2v9.2l3.3-3.3 1.4 1.4L12 16l-5.7-5.7 1.4-1.4L11 12.2V3zM5 18h14v2H5z"/></svg>Add to Chrome</a>
+      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="links"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="grid-bg" aria-hidden="true"></div>
+      <div class="wrap hero-in">
+        <p class="eyebrow"><span class="dot"></span> Early access · Chrome &amp; Edge</p>
+        <h1>One paste can <span class="grad-bad">leak</span> everything.<br>We make sure it <span class="grad">never leaves.</span></h1>
+        <p class="lead">Your team is already using ChatGPT, Gemini and Claude. Every prompt is a possible leak of passwords, customer records and source code. <b>AI Browser Guard</b> checks every paste, upload and prompt <b>inside the browser</b> and stops it before it reaches the model.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary btn-lg" data-install href="https://chromewebstore.google.com/detail/monk-focus/dagfandmfdlbgdgelnbeiacmchjihpnd" target="_blank" rel="noopener noreferrer"><svg class="dl" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M11 3h2v9.2l3.3-3.3 1.4 1.4L12 16l-5.7-5.7 1.4-1.4L11 12.2V3zM5 18h14v2H5z"/></svg>Add to Chrome — free trial</a>
+          <a class="btn btn-ghost btn-lg" href="#try">Try the detector →</a>
+        </div>
+        <ul class="trust">
+          <li>No cloud servers</li><li>No telemetry</li><li>Nothing leaves your browser</li><li>Admin-controlled</li>
+        </ul>
+      </div>
+
+      <!-- LIVE LEAK DEMO -->
+      <div class="wrap">
+        <div class="demo" id="demo" aria-label="Animated demonstration: data leaking to an AI model without protection, and being blocked with AI Browser Guard">
+          <div class="demo-bar">
+            <div class="demo-title"><span class="live"></span> Live simulation</div>
+            <button class="switch" id="guardSwitch" role="switch" aria-checked="false" aria-label="AI Browser Guard protection">
+              <span class="sw-label off">Guard OFF</span>
+              <span class="sw-track"><span class="sw-knob"></span></span>
+              <span class="sw-label on">Guard ON</span>
+            </button>
+          </div>
+
+          <div class="stage" id="stage">
+            <!-- employee -->
+            <div class="node win" id="nodeUser">
+              <div class="win-bar"><i></i><i></i><i></i><span>chatgpt.com</span></div>
+              <div class="win-body">
+                <p class="who">Employee prompt</p>
+                <div class="prompt" id="prompt" aria-live="off"></div>
+                <button class="send" id="send" tabindex="-1" aria-hidden="true">Send ↑</button>
+              </div>
+            </div>
+
+            <!-- shield gate -->
+            <div class="node gate" id="nodeGate">
+              <svg viewBox="0 0 120 140" class="shield" aria-hidden="true">
+                <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset=".55" stop-color="#6366F1"/><stop offset="1" stop-color="#A855F7"/></linearGradient></defs>
+                <path d="M60 6 L108 24 V68 Q108 112 60 134 Q12 112 12 68 V24 Z" fill="url(#sg)"/>
+                <path d="M60 14 L100 29 V68 Q100 104 60 124 Q20 104 20 68 V29 Z" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="2"/>
+                <circle cx="60" cy="58" r="12" fill="#fff"/><path d="M53.5 67 H66.5 L71 100 H49 Z" fill="#fff"/>
+              </svg>
+              <p class="gate-state" id="gateState">Guard off</p>
+            </div>
+
+            <!-- AI model -->
+            <div class="node cloud" id="nodeCloud">
+              <svg viewBox="0 0 120 90" aria-hidden="true"><path d="M30 76h62a22 22 0 0 0 3-43.8A30 30 0 0 0 37 26a25 25 0 0 0-7 50z" fill="currentColor"/></svg>
+              <p class="cloud-name">External AI model</p>
+              <p class="cloud-sub" id="cloudSub">Prompts may be stored &amp; used</p>
+            </div>
+
+            <!-- attacker -->
+            <div class="node threat" id="nodeThreat">
+              <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6C18 6 8 16 8 29c0 8 4 14 9 18v9h8v-5h4v5h6v-5h4v5h8v-9c5-4 9-10 9-18C56 16 46 6 32 6z" fill="currentColor"/><circle cx="23" cy="28" r="5" fill="#070d26"/><circle cx="41" cy="28" r="5" fill="#070d26"/></svg>
+              <p>Breach / data broker</p>
+            </div>
+
+            <div class="packets" id="packets" aria-hidden="true"></div>
+            <div class="toast" id="toast" role="status" aria-live="polite"></div>
+          </div>
+
+          <div class="meters">
+            <div class="meter bad"><span class="m-num" id="mLeaked">0</span><span class="m-lab">sensitive items exposed</span></div>
+            <div class="meter good"><span class="m-num" id="mBlocked">0</span><span class="m-lab">leaks stopped</span></div>
+            <p class="meter-note">Illustrative simulation with fake data. Flip the switch to compare.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats" id="risk">
+      <div class="wrap">
+        <p class="eyebrow center">The risk is not theoretical</p>
+        <h2 class="center">Shadow AI is now a <span class="grad-bad">measurable breach cost</span></h2>
+        <p class="sub center">When employees use AI tools without controls, sensitive data goes wherever the prompt goes. Independent research shows what it costs.</p>
+        <div class="stat-grid">
+          <article class="stat"><div class="num"><span class="count" data-to="670" data-pre="$" data-suf="K">0</span></div><h3>extra cost per breach</h3><p>Added on average when shadow AI is widespread in an organisation.<a href="#src1" class="fn">1</a></p></article>
+          <article class="stat"><div class="num"><span class="count" data-to="20" data-suf="%">0</span></div><h3>of organisations breached via shadow AI</h3><p>One in five studied organisations reported a breach linked to unsanctioned AI.<a href="#src1" class="fn">1</a></p></article>
+          <article class="stat"><div class="num"><span class="count" data-to="97" data-suf="%">0</span></div><h3>lacked proper AI access controls</h3><p>Of organisations that reported an AI-related security incident.<a href="#src1" class="fn">1</a></p></article>
+          <article class="stat"><div class="num"><span class="count" data-to="37" data-suf="%">0</span></div><h3>have a policy to manage AI</h3><p>Only about a third have policies to govern AI or detect shadow AI.<a href="#src1" class="fn">1</a></p></article>
+        </div>
+        <div class="callout">
+          <div><b>$4.44M</b><span>global average cost of a data breach in 2025<a href="#src1" class="fn">1</a></span></div>
+          <div><b>65%</b><span>of shadow-AI breaches exposed customer personal data, versus 53% overall<a href="#src1" class="fn">1</a></span></div>
+          <div><b>30M+</b><span>computers seen infected by credential-stealing malware<a href="#src3" class="fn">3</a></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THREATS -->
+    <section class="threats">
+      <div class="wrap">
+        <p class="eyebrow">Where leaks really come from</p>
+        <h2>Three ways good employees leak data <span class="grad">by accident</span></h2>
+        <div class="cards3">
+          <article class="card">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M9 4h6l1 2h3v14H5V6h3zM9 12h6M9 16h6" /></svg></div>
+            <h3>“Can you fix this error?”</h3>
+            <p>A developer pastes a config file to debug it. It contains a database password, an API key or an internal hostname. The model now holds your keys.</p>
+            <span class="tag">Credentials · Source code</span>
+          </article>
+          <article class="card">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4zM8 9h8M8 12h5" /></svg></div>
+            <h3>“Summarise this customer file”</h3>
+            <p>Sales or support uploads a spreadsheet of customers to get a quick summary. Names, emails, phone numbers and account IDs leave your control in one click.</p>
+            <span class="tag">Customer data · PII</span>
+          </article>
+          <article class="card">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l9 4v5c0 5-4 8-9 9-5-1-9-4-9-9V7z" /><path d="M9 12l2 2 4-4" /></svg></div>
+            <h3>“Rewrite this contract / roadmap”</h3>
+            <p>Strategy, pricing and legal drafts are pasted into a public chatbot with a personal account. No log, no policy, no way to know it happened.</p>
+            <span class="tag">Confidential · Strategy</span>
+          </article>
+        </div>
+
+        <div class="case">
+          <div class="case-mark">Real case</div>
+          <div>
+            <h3>Samsung, 2023: three leaks in about three weeks</h3>
+            <p>Shortly after the company allowed ChatGPT, engineers reportedly pasted semiconductor source code and meeting content into it on at least three occasions. Samsung then banned generative AI tools on company devices.<a href="#src2" class="fn">2</a></p>
+            <p class="case-take">Banning AI slows teams down. Blocking the <em>data</em> keeps both the speed and the secrets.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- INSTALL STRIP -->
+    <section class="strip">
+      <div class="wrap">
+        <div class="strip-box">
+          <div><h3>Your team is one paste away from a leak.</h3><p>Install AI Browser Guard on Chrome or Edge in under a minute. The free trial starts right away.</p></div>
+          <a class="btn btn-primary btn-lg" data-install href="https://chromewebstore.google.com/detail/monk-focus/dagfandmfdlbgdgelnbeiacmchjihpnd" target="_blank" rel="noopener noreferrer"><svg class="dl" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M11 3h2v9.2l3.3-3.3 1.4 1.4L12 16l-5.7-5.7 1.4-1.4L11 12.2V3zM5 18h14v2H5z"/></svg>Install the extension now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW -->
+    <section class="how" id="how">
+      <div class="wrap">
+        <p class="eyebrow center">How it works</p>
+        <h2 class="center">A guard that sits <span class="grad">between your people and the model</span></h2>
+        <p class="sub center">Every decision is made locally by a deterministic policy engine. No AI guessing, no cloud round-trip.</p>
+        <ol class="flow">
+          <li><span class="step">1</span><h3>Detect</h3><p>Pastes, uploads, prompts and downloads are scanned in the browser for credentials, personal data, internal IPs and your own keywords.</p></li>
+          <li><span class="step">2</span><h3>Decide</h3><p>Your policy picks one outcome: <b class="c-ok">Allow</b>, <b class="c-warn">Warn</b>, <b class="c-auth">Require authorization</b> or <b class="c-bad">Block</b>.</p></li>
+          <li><span class="step">3</span><h3>Authorize</h3><p>When a manager approves, a company password allows <em>that one action</em> for 60 seconds. It can never override a hard block.</p></li>
+          <li><span class="step">4</span><h3>Audit</h3><p>Every decision is written to a hash-chained log. Verify it, export it to CSV or JSON, and review incidents. Prompts and files are never stored.</p></li>
+        </ol>
+
+        <div class="decisions">
+          <div class="dec ok"><b>ALLOW</b><span>Normal text goes through</span></div>
+          <div class="dec warn"><b>WARN</b><span>“Are you sure?” confirmation</span></div>
+          <div class="dec auth"><b>REQUIRE AUTHORIZATION</b><span>Company password, one time</span></div>
+          <div class="dec bad"><b>BLOCK</b><span>No password can override</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETECTOR -->
+    <section class="try" id="try">
+      <div class="wrap">
+        <p class="eyebrow center">Interactive demo</p>
+        <h2 class="center">Paste something risky. <span class="grad">See what the guard sees.</span></h2>
+        <p class="sub center">This runs entirely in your browser; nothing you type is sent anywhere. It is a simplified preview of the extension’s detection engine.</p>
+
+        <div class="try-box">
+          <div class="try-in">
+            <label for="tryText">Type or paste a prompt</label>
+            <textarea id="tryText" rows="9" spellcheck="false" placeholder="Try: Please debug this: DB_PASSWORD=Sup3rS3cret!x9 on 10.2.4.17 for customer priya@acme-client.com"></textarea>
+            <div class="try-actions">
+              <button class="btn btn-ghost" id="sampleBad" type="button">Load risky sample</button>
+              <button class="btn btn-ghost" id="sampleOk" type="button">Load safe sample</button>
+              <button class="btn btn-ghost" id="clearTry" type="button">Clear</button>
+            </div>
+          </div>
+          <div class="try-out" aria-live="polite">
+            <div class="verdict" id="verdict" data-level="none">
+              <span class="v-label">Decision</span>
+              <b id="vTitle">Waiting for input</b>
+              <span id="vSub">Type something to scan it.</span>
+            </div>
+            <div class="marked" id="marked" aria-label="Text with detected items highlighted"></div>
+            <ul class="found" id="found"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- INSTALL STRIP -->
+    <section class="strip">
+      <div class="wrap">
+        <div class="strip-box">
+          <div><h3>Seen enough? Protect your prompts today.</h3><p>No cloud account, no telemetry. Add it to the browser, create your admin password and you are protected.</p></div>
+          <a class="btn btn-primary btn-lg" data-install href="https://chromewebstore.google.com/detail/monk-focus/dagfandmfdlbgdgelnbeiacmchjihpnd" target="_blank" rel="noopener noreferrer"><svg class="dl" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M11 3h2v9.2l3.3-3.3 1.4 1.4L12 16l-5.7-5.7 1.4-1.4L11 12.2V3zM5 18h14v2H5z"/></svg>Install the extension now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" id="features">
+      <div class="wrap">
+        <p class="eyebrow center">Everything an admin needs</p>
+        <h2 class="center">Enterprise-grade control, <span class="grad">built for small teams</span></h2>
+        <div class="fgrid">
+          <article class="f"><h3>Clipboard protection</h3><p>Copy, cut, paste and drag-and-drop of text are checked before they reach a protected site.</p></article>
+          <article class="f"><h3>File upload gate</h3><p>Files are scanned before the password prompt. Encrypted or unreadable files are never treated as safe.</p></article>
+          <article class="f"><h3>Prompt &amp; form scanning</h3><p>Pressing Enter or Send holds the prompt until it has been checked against your policies.</p></article>
+          <article class="f"><h3>Download control</h3><p>Block executables and installers, control archives and large files from AI sites.</p></article>
+          <article class="f"><h3>Your own sensitive words</h3><p>Add client names, project codes, customer-ID patterns and custom rules. Test them safely in the dashboard.</p></article>
+          <article class="f"><h3>Two-password model</h3><p>One master password for admins. A separate company password to authorize single actions.</p></article>
+          <article class="f"><h3>Tamper-evident audit log</h3><p>Hash-chained records with integrity check and CSV/JSON export. No prompts or files stored.</p></article>
+          <article class="f"><h3>Explainable risk score</h3><p>Every point of the 0–100 score comes from a named signal, so decisions are easy to defend.</p></article>
+          <article class="f"><h3>Roles &amp; departments</h3><p>Admin and employee accounts, departments, approvals and password resets.</p></article>
+          <article class="f"><h3>Custom AI sites</h3><p>Built in for ChatGPT, Gemini, Claude, Copilot and Perplexity. Add or block any other site.</p></article>
+          <article class="f"><h3>Managed deployment</h3><p>Roll out through your browser management tools with locked, managed policies.</p></article>
+          <article class="f"><h3>5 themes, your branding</h3><p>Your company name and tagline appear in the dashboard and the employee popup.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOCAL FIRST -->
+    <section class="local">
+      <div class="wrap local-in">
+        <div>
+          <p class="eyebrow">Privacy by design</p>
+          <h2>Your data protection tool <span class="grad">should not leak your data</span></h2>
+          <p class="lead2">Most security tools send your content to their servers to inspect it. AI Browser Guard does the opposite: the scanning happens on the employee’s computer and only the decision is recorded.</p>
+          <ul class="ticks">
+            <li>No cloud service, no account on our servers</li>
+            <li>No public AI API calls</li>
+            <li>No external telemetry or analytics</li>
+            <li>Passwords stored only as Argon2id hashes</li>
+            <li>Prompts, pasted text and file contents are never logged</li>
+          </ul>
+        </div>
+        <div class="compare" role="table" aria-label="Comparison">
+          <div class="row head" role="row"><span role="columnheader"></span><span role="columnheader">Typical cloud DLP</span><span role="columnheader" class="us">AI Browser Guard</span></div>
+          <div class="row" role="row"><span role="rowheader">Where content is scanned</span><span>Vendor servers</span><span class="us">In the browser</span></div>
+          <div class="row" role="row"><span role="rowheader">Content sent out</span><span>Yes</span><span class="us">No</span></div>
+          <div class="row" role="row"><span role="rowheader">Setup</span><span>Agents, proxies, SSO</span><span class="us">Load extension, 5 min</span></div>
+          <div class="row" role="row"><span role="rowheader">Works offline</span><span>No</span><span class="us">Yes (licensing too)</span></div>
+          <div class="row" role="row"><span role="rowheader">Built for</span><span>Large enterprises</span><span class="us">Startups &amp; SMBs</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETUP -->
+    <section class="setup">
+      <div class="wrap">
+        <p class="eyebrow center">Up and running in minutes</p>
+        <h2 class="center">Three steps. <span class="grad">No infrastructure.</span></h2>
+        <div class="steps3">
+          <article><span class="n">01</span><h3>Install</h3><p>Load the extension in Chrome or Edge on your team’s computers.</p></article>
+          <article><span class="n">02</span><h3>Set up</h3><p>Enter your company name, create the admin account and two passwords. The free trial starts.</p></article>
+          <article><span class="n">03</span><h3>Protect</h3><p>Add your sensitive words, review the 19 default policies and invite employees. A guided tour welcomes each of them.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- HONEST -->
+    <section class="honest">
+      <div class="wrap">
+        <div class="honest-box">
+          <h2>Honest about what it is</h2>
+          <p>AI Browser Guard is browser-level protection, not an operating-system DLP. We would rather tell you the limits than overpromise.</p>
+          <ul>
+            <li><b>Early access:</b> built and tested against a local simulation of an AI site. Run a pilot on your own AI sites before wide roll-out.</li>
+            <li>Downloads are controlled by file type, size and source; their contents cannot be inspected before saving.</li>
+            <li>Images and encrypted files cannot be read, so they follow your “unsupported files” rule and are never treated as safe.</li>
+            <li>The audit log is tamper-<em>evident</em>, not tamper-proof against someone with full control of the computer.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+      <div class="wrap narrow">
+        <p class="eyebrow center">Questions</p>
+        <h2 class="center">Frequently asked</h2>
+        <details><summary>Does it send our prompts or files to you?</summary><p>No. Scanning and decisions happen locally in the browser. The extension has no cloud service, no telemetry and does not call any AI API. Only a content-free summary (such as “1 credential found”) is stored in the local audit log.</p></details>
+        <details><summary>Which AI sites are supported?</summary><p>ChatGPT, Google Gemini, Claude, Microsoft Copilot and Perplexity are built in. Admins can add any other site or block one entirely. Sites you add need a one-time browser permission granted by the admin.</p></details>
+        <details><summary>Can an employee bypass it with the password?</summary><p>Only for actions your policy marks “require authorization”, and only once for 60 seconds. Hard blocks, such as passwords, API keys and private keys, cannot be overridden by any password.</p></details>
+        <details><summary>What happens when the free trial ends?</summary><p>Protected actions are blocked until a license is activated, and existing settings and logs are kept. The admin sees a Buy a license button that opens an email to us with the installation ID filled in. Licenses are verified offline.</p></details>
+        <details><summary>Is it a replacement for endpoint or network security?</summary><p>No. It is a focused layer that closes the AI-prompt gap in the browser. Keep your existing endpoint, MFA and network controls.</p></details>
+        <details><summary>Is my data safe if the admin forgets the password?</summary><p>Passwords are stored only as hashes and cannot be recovered. Keep them in your password manager and export the audit log regularly.</p></details>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="contact">
+      <div class="wrap">
+        <div class="cta-box">
+          <img src="/assets/logo.svg" width="64" height="64" alt="">
+          <h2>Stop the next leak before it happens</h2>
+          <p>Add AI Browser Guard to Chrome or Edge, create your admin account and start the free trial. It takes less than a minute.</p>
+          <div class="cta-row center-row">
+            <a class="btn btn-primary btn-lg" data-install href="https://chromewebstore.google.com/detail/monk-focus/dagfandmfdlbgdgelnbeiacmchjihpnd" target="_blank" rel="noopener noreferrer"><svg class="dl" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M11 3h2v9.2l3.3-3.3 1.4 1.4L12 16l-5.7-5.7 1.4-1.4L11 12.2V3zM5 18h14v2H5z"/></svg>Install the extension now</a>
+            <a class="btn btn-ghost btn-lg" href="mailto:connect2saurabhk@gmail.com?subject=Buy%20license%3A%20AI%20Browser%20Guard&amp;body=I%20want%20to%20buy%20license%20for%20your%20extension%20AI%20Browser%20Guard">Buy a license</a>
+          </div>
+          <p class="mail">connect2saurabhk@gmail.com</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-in">
+      <div class="brand"><img src="/assets/logo.svg" width="32" height="32" alt=""><span><b>AI Browser Guard</b><small>Protect your Sensitive data with us</small></span></div>
+      <ol class="sources" aria-label="Sources">
+        <li id="src1"><a href="https://newsroom.ibm.com/2025-07-30-ibm-report-13-of-organizations-reported-breaches-of-ai-models-or-applications,-97-of-which-reported-lacking-proper-ai-access-controls" target="_blank" rel="noopener noreferrer">IBM / Ponemon, Cost of a Data Breach Report 2025</a></li>
+        <li id="src2"><a href="https://www.theregister.com/2023/05/02/samsung_generative_ai_ban/" target="_blank" rel="noopener noreferrer">The Register, Samsung puts ChatGPT back in the box (May 2023)</a></li>
+        <li id="src3"><a href="https://infostealers.com/?p=4666" target="_blank" rel="noopener noreferrer">Hudson Rock / Infostealers.com, infostealer infection data</a></li>
+      </ol>
+      <p class="legal">Figures are from the cited third-party reports. Demo animations use fake data. © <span id="year">2026</span> AI Browser Guard.</p>
+    </div>
+  </footer>
+</body>
+</html>
